@@ -11,45 +11,34 @@ class Form extends Component {
   handleChangePersons = (event) =>
     this.setState({ totalPersons: event.target.value });
 
-  handleResetNumbers = (e) => {
+  handleResetNumbers = () => this.setState({ totalPrice: 0, totalPersons: 0 });
+
+  handlePost = (e) => {
     e.preventDefault();
-    this.setState({ totalPrice: 0, totalPersons: 0 });
+    const { totalPrice, totalPersons } = this.state;
+    const { onSubmit } = this.props;
+    if (totalPrice <= 0 || totalPersons <= 0) return this.handleErrorMessage();
+
+    this.handleResetNumbers({ totalPrice: 0, totalPersons: 0 });
+    onSubmit(totalPrice, totalPersons);
   };
 
-  handleErrorMessage = (cost, person) => {
-    const isTotalCost = cost === 0;
-    const isTotalNumber = person === 0;
-    const isMinusCost = cost < 0;
-    const isMinusNumber = person < 0;
-    const isNull = isTotalCost || isTotalNumber;
-    const isMinus = isMinusCost || isMinusNumber;
-    if (isNull) {
-      const errorMessage = isTotalCost
-        ? "合計額を入力して下さい"
-        : "人数を入力して下さい";
-      return alert(errorMessage);
-    }
-    if (isMinus) {
-      const errorMessage = "マイナスは入力できません";
+  handleErrorMessage = () => {
+    const { totalPrice, totalPersons } = this.state;
+    const isValid = totalPrice === 0 || totalPersons === 0;
+
+    if (isValid) {
+      const errorMessage =
+        totalPrice === 0 ? "合計額を入力して下さい" : "人数を入力して下さい";
       return alert(errorMessage);
     }
   };
 
   render() {
     const { totalPrice, totalPersons } = this.state;
-    const { onSubmit } = this.props;
+
     return (
-      <form
-        onSubmit={(e) => {
-          const cost = totalPrice;
-          const person = totalPersons;
-          if (cost <= 0 || person <= 0) {
-            return this.handleErrorMessage(cost, person);
-          }
-          onSubmit(cost, person);
-          this.handleResetNumbers(e);
-        }}
-      >
+      <form onSubmit={(e) => this.handlePost(e)}>
         <div>
           Total Cost:
           <input
