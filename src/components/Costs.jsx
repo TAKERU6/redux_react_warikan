@@ -8,7 +8,7 @@ class Costs extends Component {
       <div>
         {Object.values(costs).map((cost) => (
           <h3 key={cost.id}>
-            Case{cost.id + 1}: Price: {cost.splitCost} $
+            Case{cost.id}: Price: {cost.splitCost} $
           </h3>
         ))}
       </div>
