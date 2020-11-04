@@ -24,15 +24,6 @@ class Form extends Component {
         onSubmit={(e) => {
           const cost = totalPrice;
           const person = totalPersons;
-          const isTotalCost = totalPrice <= 0;
-          const isTotalNumber = totalPersons <= 0;
-          const isBelowNull = isTotalCost || isTotalNumber;
-          if (isBelowNull) {
-            const errorMessage = isTotalCost
-              ? "合計額を入力して下さい"
-              : "人数を入力して下さい";
-            return alert(errorMessage);
-          }
           onSubmit(cost, person);
           this.handleResetNumbers(e);
         }}
